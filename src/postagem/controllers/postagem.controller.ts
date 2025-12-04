@@ -10,8 +10,8 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { PostagemService } from '../services/postagem.service';
 import { Postagem } from '../entities/postagem.entity';
+import { PostagemService } from '../services/postagem.service';
 
 @Controller('/postagens')
 export class PostagemController {
@@ -31,7 +31,7 @@ export class PostagemController {
 
   @Get('/titulo/:titulo')
   @HttpCode(HttpStatus.OK)
-  findAllByTitulo(@Param('titulo') titulo: string): Promise<Postagem[]> {
+  findByTitulo(@Param('titulo') titulo: string): Promise<Postagem[]> {
     return this.postagemService.findAllByTitulo(titulo);
   }
 

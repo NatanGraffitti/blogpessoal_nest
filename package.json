@@ -1,5 +1,5 @@
 {
-  "name": "blog-pessoal",
+  "name": "blog",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -24,13 +24,12 @@
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/typeorm": "^11.0.0",
-    "class-transformer": "0.5.1",
-    "class-validator": "^0.14.1",
-    "dotenv": "^17.2.3",
-    "mysql2": "^3.10.3",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.3",
+    "mysql2": "^3.15.3",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
-    "typeorm": "^0.3.20"
+    "typeorm": "^0.3.27"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
