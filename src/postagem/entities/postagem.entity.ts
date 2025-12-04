@@ -16,7 +16,7 @@ export class Postagem {
   titulo: string;
 
   @IsNotEmpty()
-  @Column({ length: 1000, nullable: false })
+  @Column({ type: 'text', nullable: false })
   texto: string;
 
   @UpdateDateColumn()
