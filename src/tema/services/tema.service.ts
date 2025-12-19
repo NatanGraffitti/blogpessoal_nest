@@ -1,7 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, ILike, Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { Tema } from '../entities/tema.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { DeleteResult } from 'typeorm/browser';
 
 @Injectable()
 export class TemaService {
@@ -9,14 +10,6 @@ export class TemaService {
     @InjectRepository(Tema)
     private temaRepository: Repository<Tema>,
   ) {}
-
-  async findAll(): Promise<Tema[]> {
-    return await this.temaRepository.find({
-      relations: {
-        postagem: true,
-      },
-    });
-  }
 
   async findById(id: number): Promise<Tema> {
     const tema = await this.temaRepository.findOne({
@@ -27,15 +20,22 @@ export class TemaService {
         postagem: true,
       },
     });
-
-    if (!tema)
-      throw new HttpException('Tema não encontrado!', HttpStatus.NOT_FOUND);
-
+    if (!tema) {
+      throw new HttpException('Tema não encontrado', HttpStatus.NOT_FOUND);
+    }
     return tema;
   }
 
-  async findAllByDescricao(descricao: string): Promise<Tema[]> {
+  async findAll(): Promise<Tema[]> {
     return await this.temaRepository.find({
+      relations: {
+        postagem: true,
+      },
+    });
+  }
+
+  async findAllByDescricao(descricao: string): Promise<Tema[]> {
+    const tema = await this.temaRepository.find({
       where: {
         descricao: ILike(`%${descricao}%`),
       },
@@ -43,21 +43,23 @@ export class TemaService {
         postagem: true,
       },
     });
+    if (tema.length === 0) {
+      throw new HttpException('Tema não encontrado', HttpStatus.NOT_FOUND);
+    }
+    return tema;
   }
 
-  async create(Tema: Tema): Promise<Tema> {
-    return await this.temaRepository.save(Tema);
+  async create(tema: Tema): Promise<Tema> {
+    return await this.temaRepository.save(tema);
   }
 
   async update(tema: Tema): Promise<Tema> {
     await this.findById(tema.id);
-
     return await this.temaRepository.save(tema);
   }
 
   async delete(id: number): Promise<DeleteResult> {
     await this.findById(id);
-
     return await this.temaRepository.delete(id);
   }
 }
