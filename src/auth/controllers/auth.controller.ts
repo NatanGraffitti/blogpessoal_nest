@@ -6,9 +6,9 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { LocalAuthGuard } from '../guard/local-auth.guard';
 import { AuthService } from '../services/auth.service';
-import { UsuarioLogin } from './../entities/usuariologin.entity';
+import { UsuarioLogin } from '../entities/usuariologin.entity';
+import { LocalAuthGuard } from '../guard/local-auth.guard';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Usuario')

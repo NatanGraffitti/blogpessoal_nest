@@ -1,16 +1,14 @@
 import { Controller, Get, Res } from '@nestjs/common';
 import { ApiExcludeEndpoint } from '@nestjs/swagger';
+import type { Response } from 'express';
 
 @Controller()
 export class AppController {
-  getHello(): any {
-    throw new Error('Method not implemented.');
-  }
   constructor() {}
 
   @ApiExcludeEndpoint()
   @Get()
-  redirect(@Res() resposta: any) {
+  redirect(@Res() resposta: Response) {
     return resposta.redirect('/swagger');
-}
+  }
 }

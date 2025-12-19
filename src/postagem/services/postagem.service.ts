@@ -1,7 +1,7 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, ILike, Repository } from 'typeorm';
 import { Postagem } from '../entities/postagem.entity';
-import { InjectRepository } from '@nestjs/typeorm';
 import { TemaService } from '../../tema/services/tema.service';
 
 @Injectable()
@@ -22,7 +22,7 @@ export class PostagemService {
   }
 
   async findById(id: number): Promise<Postagem> {
-    const postagem = await this.postagemRepository.findOne({
+    let postagem = await this.postagemRepository.findOne({
       where: {
         id,
       },
@@ -39,33 +39,25 @@ export class PostagemService {
   }
 
   async findAllByTitulo(titulo: string): Promise<Postagem[]> {
-    const tituloPostagem = await this.postagemRepository.find({
+    return await this.postagemRepository.find({
       where: {
         titulo: ILike(`%${titulo}%`),
       },
+      relations: {
+        tema: true,
+        usuario: true,
+      },
     });
-
-    if (tituloPostagem.length === 0)
-      throw new HttpException(
-        'Nenhuma postagem encontrada com esse título',
-        HttpStatus.NOT_FOUND,
-      );
-
-    return tituloPostagem;
   }
 
   async create(postagem: Postagem): Promise<Postagem> {
-    await this.findById(postagem.id);
-
     await this.temaService.findById(postagem.tema.id);
-
     return await this.postagemRepository.save(postagem);
   }
 
   async update(postagem: Postagem): Promise<Postagem> {
-    console.log(postagem);
-
     await this.findById(postagem.id);
+    await this.temaService.findById(postagem.tema.id);
 
     return await this.postagemRepository.save(postagem);
   }
